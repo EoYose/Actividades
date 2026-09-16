@@ -1,0 +1,238 @@
+ Dfd (c)
+1
+1
+3
+0
+0
+4
+1
+31
+"Calculadora del dia siguiente"
+4
+1
+50
+"Por favor ingresar dia mes y año respectivamente"
+5
+1
+3
+dia
+5
+1
+3
+mes
+5
+1
+3
+año
+7
+0
+1
+19
+mes > 12 or mes < 1
+6
+1
+1
+n
+1
+0
+12
+1
+11
+diasdeunmes
+1
+11
+año, mes, n
+7
+0
+1
+7
+dia > n
+6
+1
+3
+dia
+7
+dia + 1
+12
+1
+9
+diamesaño
+1
+16
+n, dia, mes, año
+4
+1
+36
+"Fecha del dia siguiente resultante"
+4
+1
+5
+"Dia"
+4
+1
+3
+dia
+4
+1
+5
+"Mes"
+4
+1
+3
+mes
+4
+1
+5
+"Año"
+4
+1
+3
+año
+13
+4
+1
+15
+"Dia no valido"
+13
+13
+4
+1
+15
+"Mes no valido"
+13
+1
+2
+1
+11
+diasdeunmes
+1
+11
+año, mes, n
+1
+127
+Este subprograma tiene la funcion de determinar los dias que tiene un mes dependiendo del mes que sea y si es año bisiesto o no
+7
+0
+1
+7
+mes = 2
+7
+0
+1
+75
+mes = 1 or mes = 3 or mes = 5 or mes = 7 or mes = 8 or mes = 10 or mes = 12
+6
+1
+1
+n
+2
+30
+13
+6
+1
+1
+n
+2
+31
+13
+13
+6
+3
+3
+aux
+9
+año mod 4
+4
+aux2
+11
+año mod 400
+4
+aux3
+11
+año mod 100
+6
+1
+1
+n
+2
+28
+7
+0
+1
+7
+aux = 0
+13
+7
+0
+1
+8
+aux2 = 0
+7
+0
+1
+9
+aux3 != 0
+13
+6
+1
+1
+n
+2
+29
+13
+13
+6
+1
+1
+n
+2
+29
+13
+13
+13
+3
+2
+1
+9
+diamesaño
+1
+16
+n, dia, mes, año
+1
+159
+Este subprograma tiene la funcion de determinar el mes siguiente y año siguiente dado el caso el dia siguiente no este dentro del mes y/o año del dia referente
+7
+0
+1
+7
+dia > n
+13
+6
+2
+3
+mes
+7
+mes + 1
+3
+dia
+1
+1
+13
+7
+0
+1
+8
+mes > 12
+13
+6
+2
+3
+año
+7
+año + 1
+3
+mes
+1
+1
+13
+3

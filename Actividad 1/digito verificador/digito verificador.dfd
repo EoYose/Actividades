@@ -1,0 +1,109 @@
+ Dfd (c)
+1
+1
+1
+0
+0
+5
+1
+3
+rut
+6
+3
+7
+factor 
+2
+ 2
+5
+suma 
+2
+ 0
+4
+aux 
+4
+ rut
+9
+1
+8
+aux != 0
+6
+3
+5
+aux1 
+17
+ aux-(aux mod 10)
+7
+digito 
+9
+ aux-aux1
+4
+suma
+20
+suma+(factor*digito)
+6
+1
+7
+factor 
+9
+ factor+1
+7
+1
+1
+8
+factor>7
+6
+1
+7
+factor 
+2
+ 2
+13
+13
+6
+1
+4
+aux 
+8
+ aux1/10
+11
+6
+1
+6
+resto 
+12
+ suma mod 11
+7
+1
+1
+11
+11-resto=10
+4
+1
+3
+"k"
+13
+7
+1
+1
+11
+11-resto=11
+6
+1
+3
+dv 
+2
+ 0
+13
+6
+1
+3
+dv 
+9
+ 11-resto
+13
+4
+1
+2
+dv
+13
+1
