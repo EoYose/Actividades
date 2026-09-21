@@ -4,6 +4,7 @@
 import json
 import os
 import time
+import copy
 
 #Devuelve las coordenadas correspondientes al destino
 def mover(pos, direccion):
@@ -79,13 +80,14 @@ def movimientos_disponibles(pos,tablero):
 
 #Verifica la condicion de termino del programa
 #Tambien determina si el problema tiene solucion o no
-def fin(dimensiones,conteo, historial_posiciones):
+def fin(dimensiones, historial_posiciones):
     m,n = dimensiones
-    if m*n == conteo:
+    v = 0
+    profundidad = len(historial_posiciones)
+    if m*n == profundidad:
         return True
-    else:
-        if len(historial_posiciones) == 0:
-            return False
+    if profundidad == 0:
+        return False
     return None
 
 #Crea una matriz nula de MxN
@@ -98,9 +100,9 @@ def matriz_nula(m,n):
         matriz.append(aux)
     return matriz
 
-def guardar(tablero, aux, solucion, historial_posiciones, conteo, candidato,visitas,intentos,retrocesos,inicio):
+def guardar(estado_guardado):
     fin = time.time()
-    m,n = obtener_dimensiones(tablero)
+    m,n = obtener_dimensiones(estado_guardado["tablero"])
     file = open("SAVE.json", "r")
     datos = json.loads(file.read())
     MxN = datos.get(f"{m}x{n}")
@@ -114,16 +116,16 @@ def guardar(tablero, aux, solucion, historial_posiciones, conteo, candidato,visi
     file.close()
     datos[f"{m}x{n}"] = {
     "dimensiones" : (m,n),
-    "solucion" : solucion,
-    "conteo" : conteo,
-    "candidato" : candidato,
-    "intentos" : intentos,
-    "retrocesos" : retrocesos,
+    "solucion" : estado_guardado["solucion"],
+    "profundidad" : estado_guardado["profundidad"],
+    "candidato" : estado_guardado["candidato"],
+    "intentos" : estado_guardado["intentos"],
     "tiempo" : tiempo,
-    "tablero" : tablero,
-    "aux" : aux,
-    "visitas" : visitas,
-    "historial_posiciones" : historial_posiciones
+    "tablero" : estado_guardado["tablero"],
+    "aux" : estado_guardado["aux"],
+    "visitas" : estado_guardado["visitas"],
+    "visitas_profundidad" : estado_guardado["visitas_profundidad"],
+    "historial_posiciones" : estado_guardado["historial_posiciones"]
     }
     file = open("SAVE.json", "w")
     json.dump(datos, file,indent=2)
@@ -173,13 +175,14 @@ while menu:
         m,n = MxN["dimensiones"]
         tablero = MxN["tablero"]
         aux = MxN["aux"]
-        conteo = MxN["conteo"]
+        profundidad = MxN["profundidad"]
         candidato = MxN["candidato"]
         historial_posiciones = MxN["historial_posiciones"]
         solucion = MxN["solucion"]
         intentos = MxN["intentos"]
-        retrocesos = MxN["retrocesos"]
         visitas = MxN["visitas"]
+        visitas_profundidad = MxN.get("visitas_profundidad", [0 for _ in range(m*n)])
+        fallo_profundidad = MxN.get("fallo_profundidad", [0 for _ in range(m*n)])
         file_save = True
         break
 
@@ -189,7 +192,7 @@ if file_save == False:
     m = preguntar_numero("M: ")
     n = preguntar_numero("N: ")
 
-    #Verifica que no se este sobre escribiendo un tablero ya solucionado
+    #Verifica que no se este sobre escribiendo un tablero en proceso/solucionado
     file = json.loads(open("SAVE.json", "r").read())
     MxN = file.get(f"{m}x{n}")
     if MxN != None:
@@ -211,80 +214,92 @@ if file_save == False:
     #Registra cuantas veces se ha pasado por una misma casilla
     #Permite tener registro de las zonas mas costosas computacionalmente
     visitas = matriz_nula(m,n)
+    #Registra cuantas veces se ha entrado a una profundidad
+    visitas_profundidad = [0 for _ in range(m*n)]
+    #Registra cuantas veces se ha salido de una profundidad
+    fallo_profundidad = [0 for _ in range(m*n)]
+    
 
 
     solucion = None
-    conteo = 1
+    profundidad = 1
     candidato = 0
     historial_posiciones = [(0,0)]
     intentos = 0
     retrocesos = 0
-
+auxiliar_de_optimizacion = 0
 print("Buscando solucion")
 inicio = time.time()
-solucion = fin((m,n),conteo, historial_posiciones)
+solucion = fin((m,n), historial_posiciones)
 if solucion != None:
     print("La solucion ya fue determinada previamente")
 try:
     while solucion == None:
+        auxiliar_de_optimizacion += 1
 
         #Da los movimientos disponibles
         disponibles = movimientos_disponibles(historial_posiciones[-1], tablero)
-
-        f, c = historial_posiciones[-1] #fila, columna
-        #Movimiento valido?
-        if len(disponibles) != 0 and 8 >= disponibles[candidato] > aux[f][c]:
-            #Se realizo una optimizacion en la que en vez de ir de 1 a 8 candidato por candidato
-            #Se va desde candidato 0 hasta len(disponibles), saltandose automaticamente los no disponibles
-            #el sistema se adapta al caso de no tener ninguna disponible con la condicional de esta sangria
-            conteo += 1
-            intentos += 1
-
-            fil, col = historial_posiciones[-1] #fila, columna
-            #Anotar movimiento en aux
-            aux[fil][col] = disponibles[candidato]
-            #Anotar visita
-            visitas[fil][col] += 1
-
-            #Oficializar movimiento 
-            historial_posiciones.append(mover(historial_posiciones[-1], disponibles[candidato]))
-            fil, col = historial_posiciones[-1] #fila, columna
-            tablero[fil][col] = conteo
-            
-            candidato = 0
-
-        else:
-            #Intentar con el siguiente movimiento
-            candidato += 1
 
         #Sin movimientos?
         if candidato >= len(disponibles):
             #El candidato se vuele 0 ya que se empieza desde la direccion 0 en la lista de disponibilidad
             candidato = 0
-            retrocesos += 1
 
             #Deshacer movimiento
-            conteo -= 1
             f,c = historial_posiciones[-1]
             tablero[f][c] = 0
             aux[f][c] = 0
             del historial_posiciones[-1]
+            profundidad = len(historial_posiciones)
+            continue
 
-        solucion = fin((m,n),conteo, historial_posiciones)
+        f, c = historial_posiciones[-1] #fila, columna
+        #Movimiento valido?
+        if not 8 >= disponibles[candidato] > aux[f][c]:
+            #Intentar con el siguiente movimiento
+            candidato += 1
+            continue
+
+        #Se realizo una optimizacion en la que en vez de ir de 1 a 8 candidato por candidato
+        #Se va desde candidato 0 hasta len(disponibles), saltandose automaticamente los no disponibles
+        #el sistema se adapta al caso de no tener ninguna disponible con la condicional de esta sangria
+        #contador de intentos de avances
+        intentos += 1
+
+        fil, col = historial_posiciones[-1] #fila, columna
+        #Anotar movimiento en aux
+        aux[fil][col] = disponibles[candidato]
+        #Anotar visita
+        visitas[fil][col] += 1
+        profundidad = len(historial_posiciones)
+        visitas_profundidad[profundidad-1] += 1
+
+        #Oficializar movimiento 
+        historial_posiciones.append(mover(historial_posiciones[-1], disponibles[candidato]))
+        fil, col = historial_posiciones[-1] #fila, columna
+        tablero[fil][col] = len(historial_posiciones)
+        
+        candidato = 0
+        solucion = fin((m,n), historial_posiciones)
+
+        if auxiliar_de_optimizacion >= 22000:
+            auxiliar_de_optimizacion = 0
+            estado_guardado = {
+            "solucion": copy.deepcopy(solucion),
+            "intentos": copy.deepcopy(intentos),
+            "inicio": copy.deepcopy(inicio),
+            "profundidad": copy.deepcopy(profundidad),
+            "candidato": copy.deepcopy(candidato),
+            "tablero": copy.deepcopy(tablero),
+            "aux": copy.deepcopy(aux),
+            "visitas": copy.deepcopy(visitas),
+            "visitas_profundidad": copy.deepcopy(visitas_profundidad),
+            "historial_posiciones": copy.deepcopy(historial_posiciones),
+            }
+
 except KeyboardInterrupt:
     #Guarda si se interrumpe el proceso con ctrl+c
-    guardar(
-        tablero=tablero,
-        aux=aux,
-        conteo=conteo,
-        candidato=candidato,
-        solucion=solucion,
-        historial_posiciones=historial_posiciones,
-        visitas=visitas,
-        intentos=intentos,
-        retrocesos=retrocesos,
-        inicio=inicio
-        )
+    guardar(estado_guardado)
     exit()
 
 
@@ -293,17 +308,6 @@ print(f"\n".join([str([str(i) for i in tablero][x]) + str([str(e) for e in aux][
 print("La existencia de la solucion es:", solucion)
 
 
-guardar(
-        tablero=tablero,
-        aux=aux,
-        conteo=conteo,
-        candidato=candidato,
-        solucion=solucion,
-        historial_posiciones=historial_posiciones,
-        visitas=visitas,
-        intentos=intentos,
-        retrocesos=retrocesos,
-        inicio=inicio
-        )
+guardar(estado_guardado)
 
 input("Presione enter para salir")
