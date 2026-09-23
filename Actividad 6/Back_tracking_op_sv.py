@@ -307,6 +307,18 @@ except KeyboardInterrupt:
 print(f"\n".join([str([str(i) for i in tablero][x]) + str([str(e) for e in aux][x]) for x in range(m)])) # Muestra el tablero y el tablero auxiliar
 print("La existencia de la solucion es:", solucion)
 
+estado_guardado = {
+            "solucion": copy.deepcopy(solucion),
+            "intentos": copy.deepcopy(intentos),
+            "inicio": copy.deepcopy(inicio),
+            "profundidad": copy.deepcopy(profundidad),
+            "candidato": copy.deepcopy(candidato),
+            "tablero": copy.deepcopy(tablero),
+            "aux": copy.deepcopy(aux),
+            "visitas": copy.deepcopy(visitas),
+            "visitas_profundidad": copy.deepcopy(visitas_profundidad),
+            "historial_posiciones": copy.deepcopy(historial_posiciones),
+            }
 
 guardar(estado_guardado)
 
