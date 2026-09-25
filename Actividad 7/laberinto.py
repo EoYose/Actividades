@@ -124,7 +124,6 @@ def interptetar_archivo(file_name):
 		if not (not "=" in lectura[i] or len(lectura[i]) == 0 or lectura[i].startswith("#")):
 			lineas.append(lectura[i].split("#")[0])
 
-	print(lineas)
 	for linea in lineas:
 		variable, valor = linea.split("=")
 		variable = variable.strip()
@@ -155,6 +154,9 @@ def cargar_laberinto():
 	if os.path.isfile(file_name):
 		m,n,inicio,salida,obstaculos = interptetar_archivo(file_name)
 	else:
+		print("laberinto.dat no encontrado")
+		print("Creando uno predeterminado")
+		print("nota: el predeterminado contiene instrucciones de como modificarse")
 		predefinir_laberinto(file_name)
 		m,n,inicio,salida,obstaculos = interptetar_archivo(file_name)
 	tablero = matriz_nula(m,n)
@@ -169,8 +171,13 @@ def cargar_laberinto():
 	historial_posiciones = [inicio]
 	return m, n, tablero, aux, salida, historial_posiciones
 
-def guardar(info):
-	with open("rutas.txt","w+") as file:
+def guardar(file_name, info):
+	if os.path.isfile(file_name):
+		print("Archivo existente")
+		print("sobre escribiendo archivo")
+	else:
+		print(f"Creando {file_name}")
+	with open(file_name,"w+") as file:
 		file.write(info)
 
 #Inicializacion del laberinto
@@ -241,6 +248,7 @@ while True:
 			if modo_busqueda == "primer":
 				print("La solucion si existe")
 				#Muestra el tablero final
+				guardar("solucion.txt","\n".join([str(k) for k in tablero]))
 				print(f"\n".join([str([str(i) for i in tablero][x]) + str([str(e) for e in aux][x]) for x in range(m)])) # Muestra el tablero y el tablero auxiliar
 				break
 			elif modo_busqueda == "todas":
@@ -258,7 +266,7 @@ while True:
 			elif modo_busqueda == "todas":
 				if len(lista_soluciones) > 0:
 					print("Se han encontrado", str(len(lista_soluciones)), "soluciones")
-					guardar(str("\n\n".join([str(i) for i in ["\n".join([str(k) for k in j]) for j in lista_soluciones]])))
+					guardar("solucion.txt" ,str("\n\n".join([str(i) for i in ["\n".join([str(k) for k in j]) for j in lista_soluciones]])))
 					#Insertar sistema de guardado, usa lista_soluciones donde estan guardadas todas las soluciones encontradas
 				else:
 					print("No se ha encontrado ninguna solucion")
@@ -266,6 +274,7 @@ while True:
 				if len(mejor_tablero) > 0:
 					print(mejor_tiempo)
 					print(f"\n".join([str(i) for i in mejor_tablero])) # Muestra el tablero y el tablero auxiliar
+					guardar("mejor_solucion.dat","\n".join([str(k) for k in mejor_tablero]))
 				else:
 					print("No se ha encontrado ninguna solucion")
 			break

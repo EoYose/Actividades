@@ -1,14 +1,15 @@
 
-	#dimensiones
-	m = 4 #filas
-	n = 6 #columnas
-	#condiciones
-	inicio = (0,0)
-	salida = (4,6)
-	#obstaculos
-	obstaculo = (1,3)
-	obstaculo = (2,3)
-	obstaculo = (3,3)
-	obstaculo = (3,5)
-	obstaculo = (4,5)
+#dimensiones
+m = 4 #filas
+n = 6 #columnas
+#condiciones
+inicio = (0,0)
+salida = (4,6)
+#obstaculos
+#obstaculo valido desde (1,1) hasta (m,n)
+obstaculo = (1,3)
+obstaculo = (2,3)
+obstaculo = (3,3)
+obstaculo = (3,5)
+obstaculo = (4,5)
 	
