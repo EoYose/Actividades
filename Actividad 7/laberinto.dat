@@ -3,7 +3,7 @@
 m = 4 #filas
 n = 6 #columnas
 #condiciones
-inicio = (0,0)
+inicio = (1,1)
 salida = (4,6)
 #obstaculos
 #obstaculo valido desde (1,1) hasta (m,n)

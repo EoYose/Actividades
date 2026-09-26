@@ -50,7 +50,7 @@ def fin(salida, tablero):
 	f,c=salida
 	if len(historial_posiciones) == 0:
 		return True, False
-	elif tablero[f-1][c-1] > 0:
+	elif tablero[f][c] > 0:
 		return True, True
 	else:
 		return False, False
@@ -92,8 +92,8 @@ def predefinir_laberinto(file_name):
 #dimensiones
 m = 4 #filas
 n = 6 #columnas
-#condiciones
-inicio = (0,0)
+#condiciones valido desde (1,1) hasta (m,n)
+inicio = (1,1)
 salida = (4,6)
 #obstaculos
 #obstaculo valido desde (1,1) hasta (m,n)
@@ -106,7 +106,7 @@ obstaculo = (4,5)
 	file.write(default)
 	file.close()
 
-def interptetar_archivo(file_name):
+def interpretar_archivo(file_name):
 	def lista_normal(valor):
 		valor = valor.replace("(","").replace(")","").replace("[","").replace("]","")
 		valor = valor.split(",")
@@ -152,19 +152,19 @@ def interptetar_archivo(file_name):
 def cargar_laberinto():
 	file_name = "laberinto.dat"
 	if os.path.isfile(file_name):
-		m,n,inicio,salida,obstaculos = interptetar_archivo(file_name)
+		m,n,inicio,salida,obstaculos = interpretar_archivo(file_name)
 	else:
 		print("laberinto.dat no encontrado")
 		print("Creando uno predeterminado")
 		print("nota: el predeterminado contiene instrucciones de como modificarse")
 		predefinir_laberinto(file_name)
-		m,n,inicio,salida,obstaculos = interptetar_archivo(file_name)
+		m,n,inicio,salida,obstaculos = interpretar_archivo(file_name)
 	tablero = matriz_nula(m,n)
 	aux = matriz_nula(m,n)
-	x,y = inicio
+	x,y = inicio[0]-1, inicio[1]-1
 	tablero[x][y] = 1
 	del x,y
-	salida = salida
+	salida = (salida[0]-1,salida[1]-1)
 	for obstaculo in obstaculos:
 		x,y = obstaculo
 		tablero[x-1][y-1] = -1
