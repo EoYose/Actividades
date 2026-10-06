@@ -8,9 +8,9 @@ def mover(pos, direccion):
 	fila, columna = pos
 	match direccion:
 		case 1:
-			fila -= 1
-		case 2:
 			columna += 1
+		case 2:
+			fila -= 1
 		case 3:
 			fila += 1
 		case 4:
@@ -50,7 +50,7 @@ def fin(salida, tablero):
 	f,c=salida
 	if len(historial_posiciones) == 0:
 		return True, False
-	elif tablero[f][c] > 0:
+	elif tablero[f-1][c-1] > 0:
 		return True, True
 	else:
 		return False, False
@@ -161,10 +161,11 @@ def cargar_laberinto():
 		m,n,inicio,salida,obstaculos = interpretar_archivo(file_name)
 	tablero = matriz_nula(m,n)
 	aux = matriz_nula(m,n)
-	x,y = inicio[0]-1, inicio[1]-1
+	inicio = inicio[0]-1, inicio[1]-1
+	x,y = inicio
 	tablero[x][y] = 1
 	del x,y
-	salida = (salida[0]-1,salida[1]-1)
+	salida = salida
 	for obstaculo in obstaculos:
 		x,y = obstaculo
 		tablero[x-1][y-1] = -1
@@ -213,7 +214,8 @@ print("Buscando solucion")
 while True:
 	#Da los movimientos disponibles
 	disponibles = movimientos_disponibles(historial_posiciones[-1], (m,n), tablero)
-
+	#os.system("cls")
+	#print("\n".join([str(k) for k in tablero]))
 	f, c = historial_posiciones[-1] #fila, columna
 	#Movimiento valido?
 	if candidato in disponibles and candidato_max >= candidato > aux[f][c]:
