@@ -41,7 +41,7 @@ def SIGUIENTE_XY(TABLERO):
 
 def DEVOLVER(TABLERO, I, J, N):
 	J = J - 1
-	if J == -1 :
+	if J == -1:
 		I = I - 1
 		J = N - 1
 	return (I, J)
@@ -103,17 +103,17 @@ N = 3
 CANDIDATO = 1; SOLUCION = False ; X_INICIAL = 0 ; Y_INICIAL = 0
 TABLERO = MATRIZ_NULA(N,N)
 
-while CANDIDATO <= N*N or SOLUCION == False:
+while CANDIDATO <= N*N and SOLUCION == False:
 	if CANDIDATO_ES_VALIDO(TABLERO, CANDIDATO, N):
 		TABLERO[X][Y] = CANDIDATO
 		if LLEGO_AL_FINAL(TABLERO, N):
-			print("condicion final")
 			MOSTRAR_MATRIZ(TABLERO)
+			print("-"*10)
 			if CUADRADO_MAGICO(TABLERO, N):
 				SOLUCION = True
 			else:
 				CANDIDATO = CANDIDATO + 1 ; TABLERO[X][Y] = 0
-				while (X != X_INICIAL and Y != Y_INICIAL ) and (CANDIDATO == 10):
+				while not (X == X_INICIAL and Y == Y_INICIAL) and (CANDIDATO == 10):
 					X, Y = DEVOLVER(TABLERO, X, Y, N)
 					CANDIDATO = TABLERO[X][Y] + 1
 					TABLERO[X][Y] = 0
@@ -122,12 +122,15 @@ while CANDIDATO <= N*N or SOLUCION == False:
 			CANDIDATO = 1
 	else:
 		CANDIDATO = CANDIDATO + 1 
-		while (X != X_INICIAL and Y != Y_INICIAL ) and (CANDIDATO == 10):	
+		while not (X == X_INICIAL and Y == Y_INICIAL) and (CANDIDATO == 10):	
 			X, Y = DEVOLVER(TABLERO, X, Y, N)
 			CANDIDATO = TABLERO[X][Y] + 1
 			TABLERO[X][Y] = 0
 
+print("#"*20)
+print("Solucion")
 MOSTRAR_MATRIZ(TABLERO)
+print("#"*20)
 
 
 		
