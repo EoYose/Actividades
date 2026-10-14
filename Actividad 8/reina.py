@@ -131,7 +131,7 @@ while True:
 			del historial_posiciones[-1]
 			paso -= 1
 			candidato_x = aux[paso-1]
-			aux[paso-1] = -1
+			aux[paso] = -1
 			#Si se retorcede y revisa otra opcion, debe olvidar la rama de la cual retrocedio sin olvidar que ya paso por esa rama
 			print("retroceder", candidato_x); print("nuevo aux", aux)
 
