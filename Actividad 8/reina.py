@@ -64,7 +64,7 @@ def validar(pos, reinas, aux, m,n):
 	if colision_reinas(pos, reinas, m,n):
 		return False
 	f,c = pos
-	if aux[c] >= f:
+	if aux[c] > f:
 		return False 
 	return True
 
@@ -84,69 +84,146 @@ def mostrar_tablero(tablero):
 		print(i)
 
 def final(paso,n):
-	print("paso", paso)
 	return paso == n 
 
+def preguntar_numero(text):
+	while True:
+		respuesta = input(text)
+		if respuesta.isnumeric():
+			numero = int(respuesta)
+			return numero
+		else:
+			print("Por favor ingrese un numero")
+
+def preguntar_opciones(opciones):
+	for n in range(1,len(opciones)+1):
+		print(f"{n}.{opciones[n-1]}")
+	while True:
+		respuesta = preguntar_numero(f"1-{len(opciones)+1}> ")
+		if respuesta in range(1,len(opciones)+1):
+			return respuesta
+		else:
+			print("Opcion fuera de rango")
+
+def devolver(historial_posiciones, tablero, paso, aux, candidato_x):
+	f, c = historial_posiciones.pop() ; tablero[f][c] = 0
+	paso -= 1
+	candidato_x = aux[paso-1] + 1
+	aux[paso] = -1
+	return historial_posiciones, tablero, paso, aux, candidato_x
+
+def poner_reinas(historial_posiciones, tablero, n, aux, paso, candidato_x):
+	solucion = False
+	while True:
+		pos = (candidato_x, paso-1) # (fila, columna)
+		
+		#Movimiento valido?
+		if validar(pos, historial_posiciones, aux, n,n):
+			f,c = pos ; tablero[f][c] = paso
+			historial_posiciones.append(pos)
+			if final(paso,n):
+				solucion = True;break
+			else:
+				aux[paso-1] = candidato_x ; candidato_x = 0 ; paso += 1
+
+		else:
+			#Intentar con el siguiente movimiento
+			candidato_x += 1
+			while len(historial_posiciones) > 0 and candidato_x > n:
+				historial_posiciones, tablero, paso, aux, candidato_x = devolver(historial_posiciones,
+				tablero, paso, aux, candidato_x)
+
+			#Fin por agotamiento
+			if len(historial_posiciones) == 0 and candidato_x >= n+1:
+				solucion = False;break
+	return solucion, historial_posiciones, tablero, aux, paso, candidato_x
+
+print("Defina el tamaño N del tablero")
+n = preguntar_numero("NxN: ")
+
 #Inicializacion
-n = 4
 tablero = matriz_nula(n,n)
 aux = [-1 for _ in range(0,n,1)] #se usa -1 en vez de 0 ya que 0 ahora representa fila 0
 paso = 1
 candidato_x = 0
-candidato_y = 0
 historial_posiciones = []
-solucion = False
+solucion = True
+soluciones = []
 
-print("Buscando solucion")
+while solucion == True:
+	solucion, historial_posiciones, tablero, aux, paso, candidato_x = poner_reinas(historial_posiciones,
+	tablero, n, aux, paso, candidato_x)
+	if solucion == True:
+		soluciones.append(copy.deepcopy(tablero))
+		mostrar_tablero(tablero)
+		print("#"*20)
+		f, c = historial_posiciones.pop()
+		tablero[f][c] = 0
+		candidato_x = f + 1
+		aux[c] = f
+		paso = c + 1
 
-while True:
-	#Da los movimientos disponibles
-	#==Importante==
-	# X representa fila
-	# Y representa columna
-	pos = (candidato_x, paso-1)
-	
-	#Movimiento valido?
-	if validar(pos, historial_posiciones, aux, n,n):
-		f,c = pos
-		tablero[f][c] = paso
-		historial_posiciones.append(pos)
-		print("#"*10);mostrar_tablero(tablero)
-		if final(paso,n):
-			solucion = True
-			break
-		else:
-			aux[paso-1] = candidato_x
-			candidato_x = 0
-			paso += 1
-			print("aux", aux)
 
+del solucion
+
+def guardar(file_name, info):
+	if os.path.isfile(file_name):
+		print("Archivo existente")
+		print("sobre escribiendo archivo")
 	else:
-		#Intentar con el siguiente movimiento
-		candidato_x += 1
-		print("siguiente fila", candidato_x)
-		while len(historial_posiciones) > 0 and candidato_x == n+1:
-			f, c = historial_posiciones[-1]
-			tablero[f][c] = 0
-			del historial_posiciones[-1]
-			paso -= 1
-			candidato_x = aux[paso-1]
-			aux[paso] = -1
-			#Si se retorcede y revisa otra opcion, debe olvidar la rama de la cual retrocedio sin olvidar que ya paso por esa rama
-			print("retroceder", candidato_x); print("nuevo aux", aux)
+		print(f"Creando {file_name}")
+	with open(file_name,"w+") as file:
+		file.write(info)
 
-	#if candidato_x > n:
-	#	candidato_x = 0
-	#	candidato_y += 1
+def leer(nombre):
+	if os.path.isfile(f"{nombre}.txt"):
+		with open(f"{nombre}.txt","r") as file:
+			referencia = file.read()
+	else:
+		with open(f"{nombre}.txt","+w") as file:
+			referencia = " "
+	return referencia
 
-	#Sin movimientos?
-	#if candidato_y >= n:
-	#	print("llegado a fin")
-	#	print(f"se han puesto {paso-1} reinas para un tablero de {n}x{n}")
-	#	mostrar_tablero(tablero)
-	#	break
 
-print("llegado a fin")
-print(f"se han puesto {paso-1} reinas para un tablero de {n}x{n}")
-mostrar_tablero(tablero)
+
+referencia = leer("solucion").split("N")
+n_registradas = []
+for i in referencia:
+	i = i.split("\n")[0]
+	i = i.strip("=")
+	if i.isnumeric():
+		n_registradas.append(int(i))
+
+if not n in n_registradas: #solucion no anotada
+	with open("solucion.txt","a") as file:
+		file.write("\n")
+		file.write("N="+str(n))
+		file.write("\n")
+		for fila in soluciones[0]:
+			file.write(str(fila).strip("[]"))
+			file.write("\n")
+
+del referencia
+del n_registradas
+referencia = leer("Todas_las_soluciones").split("N")
+n_registradas = []
+for i in referencia:
+	i = i.strip("=")
+	if len(i) !=0:
+		i=i[0]
+	if i.isnumeric():
+		n_registradas.append(int(i))
+
+if not n in n_registradas:
+	with open("Todas_las_soluciones.txt","a") as file:
+		file.write("\n")
+		file.write("N="+str(n))
+		file.write("\n")
+		for solucion in soluciones:
+			for fila in solucion:
+				file.write(str(fila).strip("[]"))
+				file.write("\n")
+			file.write("\n\n")
+
+
 

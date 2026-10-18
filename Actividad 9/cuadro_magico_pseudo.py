@@ -52,7 +52,8 @@ def MOSTRAR_MATRIZ(matriz):
 
 def CUADRADO_MAGICO(TABLERO,N):
 	#AUX = SUMA_FILA(TABLERO,0, N)
-	AUX = 15
+	AUX = round((N*(N**2+1))/2)
+	#AUX = 15
 	I = 0
 	while (I<N):
 		if SUMA_FILA(TABLERO,I, N) != AUX:
@@ -99,16 +100,16 @@ def SUMA_DS(TABLERO, N):
 	return SUMA
 
 X,Y = 0, 0
-N = 3
+N = 4
 CANDIDATO = 1; SOLUCION = False ; X_INICIAL = 0 ; Y_INICIAL = 0
 TABLERO = MATRIZ_NULA(N,N)
 
 while CANDIDATO <= N*N and SOLUCION == False:
 	if CANDIDATO_ES_VALIDO(TABLERO, CANDIDATO, N):
 		TABLERO[X][Y] = CANDIDATO
+		MOSTRAR_MATRIZ(TABLERO)
+		print("-"*10)
 		if LLEGO_AL_FINAL(TABLERO, N):
-			MOSTRAR_MATRIZ(TABLERO)
-			print("-"*10)
 			if CUADRADO_MAGICO(TABLERO, N):
 				SOLUCION = True
 			else:
@@ -129,6 +130,11 @@ while CANDIDATO <= N*N and SOLUCION == False:
 
 print("#"*20)
 print("Solucion")
+print("Constante magica: "+str((N*(N**2+1))/2))
+aux = 0
+for i in range(0,len(TABLERO)):
+	aux += TABLERO[0][i]
+print("Constante actual: "+str(aux))
 MOSTRAR_MATRIZ(TABLERO)
 print("#"*20)
 
