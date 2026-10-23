@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Actividad 6/Documentacion.md",
+                "file": "Actividad 10/Transformacion iterativa a recursiva.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "Documentacion"
+              "title": "Transformacion iterativa a recursiva"
             }
           }
         ]
@@ -190,6 +190,10 @@
   },
   "active": "dd44e3e73333c4ef",
   "lastOpenFiles": [
+    "Actividad 10/Fusion de recursivas.md",
+    "Actividad 10/test.py",
+    "Actividad 10/insercion.png",
+    "Actividad 10/Transformacion iterativa a recursiva.md",
     "Actividad 6/Documentacion.md"
   ]
 }

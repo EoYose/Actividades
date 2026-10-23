@@ -67,7 +67,7 @@ if True:
 		else:
 			n = n == 0
 		return n
-#contar y sumar pares --------------------------------
+#contar y sumar pares--------------------------------
 if True:
 	def contar_y_sumar_pares_iterativo(arreglo):
 		conteo = 0
@@ -87,7 +87,7 @@ if True:
 			#envia el arreglo reducido
 			conteo, suma = contar_y_sumar_pares_recursivo(arreglo, conteo, suma)
 		return conteo, suma #cuando se resolvio la ultima recursion
-#contar y sumar impares
+#contar y sumar impares--------------------------------
 if True:
 	def contar_y_sumar_impares_iterativo(arreglo):
 		conteo = 0
@@ -175,23 +175,22 @@ if True:
 					arreglo[j], arreglo[j+1] = arreglo[j+1], arreglo[j]
 		return arreglo
 
-	#complemento
-	def aux(arreglo,j):
-		n = len(arreglo)
-		if arreglo[j] > arreglo[j+1]:
-			arreglo[j], arreglo[j+1] = arreglo[j+1], arreglo[j]
-		if j < n-2:
-			return aux(arreglo,j+1)
-		return arreglo
+	def ordenar_recursivo_burbuja(arreglo, i=0, j=0):
+	    n = len(arreglo)
 
-	#Ordenar arreglos (Ordenamiento de la burbuja)
-	def ordenar_recursivo_burbuja(arreglo, i):
-		n = len(arreglo)
-		if i<n:
-			arreglo = aux(arreglo,0)
-		if i<n-1:
-			return ordenar_recursivo_burbuja(arreglo,i+1)
-		return arreglo
+	    if n < 2 or i >= n - 1:
+	        return arreglo
+
+	    if j < n - 1:
+	        if arreglo[j] > arreglo[j + 1]:
+	            arreglo[j], arreglo[j + 1] = arreglo[j + 1], arreglo[j]
+
+	        return ordenar_recursivo_burbuja(arreglo, i, j + 1)
+
+	    return ordenar_recursivo_burbuja(arreglo, i + 1, 0)
+
+print(ordenar_recursivo_burbuja([6,2,3,1,5,4]))
+exit()
 
 #-------------------------------------
 #SHELLSORT
@@ -215,23 +214,33 @@ def principal_shell_sort_recursivo(lista):
 	salto = len(lista)//2
 	return shell_sort_recursivo(lista,salto)
 
+
 def shell_sort_recursivo(lista, salto):
-	n = len(lista) #constante
-	salto = n // 2 #variable independiente
-	while salto > 0:
-		i = salto #variable dependiente
-		while i <n:
+	def aux2(lista, salto, j, temp):
+		if j >= salto and lista[j - salto]> temp:
+			lista[j] = lista[j-salto]
+			j -= salto #modificacion
+			lista = aux2(lista,salto,j,temp)
+		else:
+			lista[j] = temp
+		return lista
+	def aux(lista,salto,i):
+		if i < n:
 			temp = lista[i] #constante dependiente
 			j=i #variable dependiente
-			while j >= salto and lista[j - salto]> temp:
-				lista[j] = lista[j-salto]
-				j -= salto #modificacion
-			lista[j] = temp
-			i+=1 #modificacion
-		salto //= 2 #modificacion
-	return lista
+			lista = aux2(lista,salto,j,temp)
+			lista = aux(lista,salto,i+1)
+		return lista
+		
+	n = len(lista) #constante
+	if not salto > 0:
+		return lista
+	i = salto #variable dependiente
+	if i <n:
+		lista = aux(lista,salto,i)
+	lista = shell_sort_recursivo(lista, salto//2)
 
-print(shell_sort_iterativo([5,2,1,4,3]))
+print(principal_shell_sort_recursivo([5,2,1,4,3]))
 exit()
 #-------------------------------------
 #QUICKSORT
