@@ -166,20 +166,18 @@ if True:
 			arreglo[j+1] = clave
 		return arreglo
 
-	def principal_ordenar_recusivo_insercion(arreglo):
-		return ordenar_recusivo_insercion(arreglo,1,0,arreglo[1])
-#!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-#Red flag
-#IndexError 
-	def ordenar_recusivo_insercion(arreglo=[],i=1,j=0,clave=None):
+	def principal_ordenar_recursivo_insercion(arreglo):
+		return ordenar_recursivo_insercion(arreglo,1,0,arreglo[1])
+
+	def ordenar_recursivo_insercion(arreglo=[],i=1,j=0,clave=None):
 		n = len(arreglo)
-		if 0 < i < n:
+		if 0 < i < n-1:
 			if j >= 0 and clave < arreglo[j]:
 				arreglo[j+1] = arreglo[j]
-				arreglo = ordenar_recusivo_insercion(arreglo, i,j-1,clave)
+				arreglo = ordenar_recursivo_insercion(arreglo, i,j-1,clave)
 			else:
 				arreglo[j+1] = clave
-				arreglo = ordenar_recusivo_insercion(arreglo, i+1,i,arreglo[i+1])
+				arreglo = ordenar_recursivo_insercion(arreglo, i+1,i,arreglo[i+1])
 		return arreglo
 
 #-------------------------------------
@@ -264,10 +262,6 @@ if True:
 #-------------------------------------
 #QUICKSORT
 
-#!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-#Red flag
-#Entrada: [6, 5, 8, 0, 10, 2, 9, 3, 1, 4]
-#Salida: [1, 0, 2, 3, 4, 6, 9, 8, 10, 5]
 def quick_sort_recursivo(lista):
 	def aux(lista,i,j):
 		n = len(lista)
@@ -280,14 +274,11 @@ def quick_sort_recursivo(lista):
 					lista[i], lista[j] = lista[j], lista[i]
 			lista, j = aux(lista,i,j)
 		return lista, j
-	i=0
-	j=-1
+	i=-1 ; j=-1 #Indice basado en cero
 	n = len(lista)
-	if n == 1:
+	if n <= 1:
 		return lista
-
 	lista, j = aux(lista,i,j)
-
 	a,b = lista[0:j],lista[j+1:n]
 	if len(a) >= 1:
 		av = quick_sort_recursivo(a)
@@ -298,6 +289,27 @@ def quick_sort_recursivo(lista):
 
 	return lista
 
+#################################
+#Busqueda Binaria
+#################################
+def principal_BBinario_recursiva(datos,valor):
+	return BBinario_recursiva(datos,0,len(datos)-1,valor)
+
+def BBinario_recursiva(datos,inicio,final,valor):
+	if inicio < final:
+		mitad = (inicio + final)//2
+		if datos[mitad] == valor:
+			return mitad
+		else:
+			if datos[mitad] > valor:
+				final -= 1
+			else:
+				inicio += 1
+			return BBinario_recursiva(datos,inicio,final,valor)
+	return False
+
+print(principal_BBinario_recursiva([00,11,22,33,44,55],32))
+exit()
 
 #################################
 #CONTROL DE ENTRADAS DEL USUARIO
@@ -323,29 +335,8 @@ def preguntar_opciones(opciones:list):
 
 
 if __name__ == "__main__":
-	iterativo = [crear_arreglo_aleatorio_iterativo, 
-	imprimir_iterativo, 
-	sumar_iterativo, 
-	determinar_par_iterativo, 
-	contar_y_sumar_impares_iterativo,
-	contar_y_sumar_impares_iterativo,
-	ordenar_iterativo_seleccion,
-	ordenar_iterativo_insercion,
-	ordenar_iterativo_burbuja,
-	shell_sort_iterativo]
-	
-	recursivo = [principal_crear_arreglo_aleatorio_recursivo,
-	principal_imprimir_recursivo,
-	principal_sumar_recursivo,
-	determinar_par_recursivo,
-	principal_contar_y_sumar_pares_recursivo,
-	principal_contar_y_sumar_impares_recursivo,
-	principal_ordenar_recursivo_seleccion,
-	principal_ordenar_recusivo_insercion,
-	principal_ordenar_recursivo_burbuja,
-	principal_shell_sort_recursivo,
-	quick_sort_recursivo
-	]
+	iterativo = [crear_arreglo_aleatorio_iterativo, imprimir_iterativo, sumar_iterativo, determinar_par_iterativo, contar_y_sumar_impares_iterativo,contar_y_sumar_impares_iterativo,ordenar_iterativo_seleccion,ordenar_iterativo_insercion,ordenar_iterativo_burbuja,shell_sort_iterativo]
+	recursivo = [principal_crear_arreglo_aleatorio_recursivo,principal_imprimir_recursivo,principal_sumar_recursivo,determinar_par_recursivo,principal_contar_y_sumar_pares_recursivo,principal_contar_y_sumar_impares_recursivo,principal_ordenar_recursivo_seleccion,principal_ordenar_recursivo_insercion,principal_ordenar_recursivo_burbuja,principal_shell_sort_recursivo,quick_sort_recursivo]
 	iterativo_ordenar = iterativo[6:9+1]
 	recursivo_ordenar = recursivo[6:10+1]
 
@@ -354,26 +345,35 @@ if __name__ == "__main__":
 		for i in eliminar:
 			text = text.replace(i, "")
 		return text.replace("_"," ")	
-	
+	def comparar_funciones(funciones, arreglo):
+		arreglo.sort()
+		for func in funciones:
+			resultado = func(arreglo)
+			print(f"funcion {func.__name__} {["no funciona", "funciona"][int(resultado == arreglo)]}")
+			if resultado != arreglo:
+				print(resultado)
+
+	def verificar(arreglo, retorno):
+		arreglo.sort()
+		print(retorno)
+		print(f"La solucion es {["incorrecta","correcta"][int(arreglo==retorno)]}")
+
 	arreglo = principal_crear_arreglo_aleatorio_recursivo(preguntar_numero("Tamaño del arreglo: "))
 	print("Arreglo creado:", arreglo)
 	match respuesta:
 		case 1:
-			respuesta = preguntar_opciones([corregir(i.__name__,["iterativo"]) for i in iterativo_ordenar])
-			print(iterativo_ordenar[respuesta-1](arreglo))
+			respuesta = preguntar_opciones([corregir(i.__name__,["iterativo"]) for i in iterativo_ordenar]+["todas"])
+			if respuesta > len(iterativo_ordenar):
+				comparar_funciones(iterativo_ordenar,arreglo)
+			else:
+				retorno = iterativo_ordenar[respuesta-1](arreglo)
+				verificar(arreglo,retorno)
 		case 2:
-			respuesta = preguntar_opciones([corregir(i.__name__,["principal","recursivo"]) for i in recursivo_ordenar])
-			print(recursivo_ordenar[respuesta-1](arreglo))
-
-
-	exit()
-	arreglo_original = [8,3,4,2,7,1,5]
-	print("Antes")
-	imprimir_recursivo(arreglo_original, 0)
-	#nuevo_arreglo = ordenar_recursivo_burbuja(arreglo_original,0)
-	nuevo_arreglo = ordenar_iterativo_insercion(arreglo_original)
-	#nuevo_arreglo = ordenar_recusivo_insercion(arreglo_original,1,0,clave=arreglo_original[1])
-	print("Despues")
-	imprimir_recursivo(nuevo_arreglo, 0)
+			respuesta = preguntar_opciones([corregir(i.__name__,["principal","recursivo"]) for i in recursivo_ordenar]+["todas"])
+			if respuesta > len(recursivo_ordenar):
+				comparar_funciones(recursivo_ordenar,arreglo)
+			else:
+				retorno = recursivo_ordenar[respuesta-1](arreglo)
+				verificar(arreglo,retorno)
 
 	input("Enter para salir..")
