@@ -90,6 +90,8 @@ def escribir_ssi_nuevo(file_name, soluciones)
 				file.write("\n")
 
 
+
+
 #Ejemplo
 if __name__ == "__main__":
 	tablero = []

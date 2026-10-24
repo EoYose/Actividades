@@ -13,15 +13,30 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Actividad 10/Transformacion iterativa a recursiva.md",
+                "file": "Actividad 10/Shell Sort.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "Transformacion iterativa a recursiva"
+              "title": "Shell Sort"
+            }
+          },
+          {
+            "id": "3a7755dc78f8ef52",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "Actividad 10/Quick Sort.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "Quick Sort"
             }
           }
-        ]
+        ],
+        "currentTab": 1
       }
     ],
     "direction": "vertical"
@@ -188,12 +203,27 @@
       "bases:Crear nueva base": false
     }
   },
-  "active": "dd44e3e73333c4ef",
+  "active": "20a21b3637da0f8e",
   "lastOpenFiles": [
-    "Actividad 10/Fusion de recursivas.md",
-    "Actividad 10/test.py",
-    "Actividad 10/insercion.png",
+    "Actividad 10/Shell Sort.md",
+    "Actividad 10/Quick Sort.md",
+    "Actividad 10/Actividad N° 10 Recursividad.pdf",
+    "Actividad 10/img/ZoomIt 2026-10-23 212911.png",
+    "Actividad 10/img/Pasted image 20261023181126.png",
+    "Actividad 10/img/shell sort example/Pasted image 20261023184246.png",
+    "Actividad 10/img/shell sort example/Pasted image 20261023184231.png",
+    "Actividad 10/img/shell sort example/Pasted image 20261023184156.png",
+    "Actividad 10/img/shell sort example/Pasted image 20261023184142.png",
+    "Actividad 10/img/shell sort example/Pasted image 20261023184032.png",
+    "Actividad 10/img/shell sort example/Pasted image 20261023184100.png",
+    "Actividad 10/img/shell sort example",
+    "Actividad 10/img/Pasted image 20261023183453.png",
     "Actividad 10/Transformacion iterativa a recursiva.md",
-    "Actividad 6/Documentacion.md"
+    "Actividad 10/Fusion de recursivas.md",
+    "Actividad 10/img/desktop.ini",
+    "Actividad 10/img",
+    "Actividad 10/img/insercion.png",
+    "Actividad 6/Documentacion.md",
+    "Actividad 10/test.py"
   ]
 }

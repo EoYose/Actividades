@@ -1,0 +1,4 @@
+Es un algoritmo de ordenamiento que divide una lista con un pivote (el ultimo numero de la lista) tal que todos los numeros menores a este esten a su derecha y los mayores a su izquierda, independientemente de su orden, hacer esto asegura que el pivote va en esa posicion, luego se separa la lista en 2, izquierda y derecha y se repite el proceso, se separa izquierda y derecha del pivote tal que este sea el centro, hasta llegar a listas compuestas solo por el pivote en casos de recursividad mas profunda, llegar a un solo elemento es el caso base para detener la recursividad y devolver la lista ordenada, y en cada retorno se reconstruye la lista ordenada con los pivotes con sus respectivas posiciones hasta llegar a la primera llamada del la funcion y retornar la lista ya ordenada.
+
+Guia:
+https://youtu.be/WprjBK0p6rw?si=yOrW9XsfMbArPNLa
