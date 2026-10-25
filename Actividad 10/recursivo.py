@@ -1,4 +1,9 @@
 import random
+import sys
+
+# Aumentar el límite a 3000 (o el número que necesites)
+sys.setrecursionlimit(3000)
+
 
 ##############################
 #Herramientas basicas
@@ -308,7 +313,68 @@ def BBinario_recursiva(datos,inicio,final,valor):
 			return BBinario_recursiva(datos,inicio,final,valor)
 	return False
 
-print(principal_BBinario_recursiva([00,11,22,33,44,55],32))
+
+#################################
+# Torres de Hanoi
+#################################
+#!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+#Resultado correcto, funcionamiento erroneo
+#-------------Torres---------------
+#o: origen #d: destino #a: auxiliar
+#Representacion de las torres con arreglos:
+#[5,4,3,2,1]
+#suelo -> cima
+def hanoi(n:int,o,d,a:list):
+	if n == 1:
+		#sacar disco de O; poner en A
+		print("a",n,o,d,a)
+		a.append(o.pop(-1))
+		print("b",n,o,d,a)
+	else:
+		print("c",n,o,d,a)
+		o,d,a=hanoi(n - 1, o, a, d)
+		#sacar disco de O; poner en A
+		print("d",n,o,d,a)
+		#a.append(o.pop(-1))
+		print("e",n,o,d,a)
+		#if n == len(d):
+			#return o,d,a
+		o,d,a=hanoi(n - 1, a, d, o)
+	print("f",n,o,d,a)
+	return o,d,a
+
+#print(hanoi(4,[4,3,2,1],[],[]))
+#exit()
+#################################
+#SUBIENDO ESCALERAS
+#################################
+
+def escaleras(n):
+	if n <= 0:
+		print("No hay peldaños por subir")
+		return lista
+	if n == 1:
+		return [[1]]
+	if n == 2:
+		return [[1,1],[2]]
+	else:
+		lista = [[1 for _ in range(n)]]
+		for j in escaleras(n-1):
+			if j != [1 for _ in range(n-1)]:
+				lista.append([1]+j)
+				lista.append(j+[1])
+		if n%2 == 0:
+			lista.append([2 for _ in range(n//2)])
+	lista_limpia = []
+	for elemento in lista:
+		if elemento not in lista_limpia:
+			lista_limpia.append(elemento)
+	return lista_limpia
+
+print("Resultado")
+resultado = escaleras(6)
+print(resultado)
+print(len(resultado))
 exit()
 
 #################################
@@ -346,7 +412,9 @@ if __name__ == "__main__":
 			text = text.replace(i, "")
 		return text.replace("_"," ")	
 	def comparar_funciones(funciones, arreglo):
+		print(f"Arreglo original: {arreglo}")
 		arreglo.sort()
+		print(f"Arreglo ordenado: {arreglo}")
 		for func in funciones:
 			resultado = func(arreglo)
 			print(f"funcion {func.__name__} {["no funciona", "funciona"][int(resultado == arreglo)]}")

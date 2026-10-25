@@ -27,12 +27,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Actividad 10/Quick Sort.md",
+                "file": "Actividad 10/Torres de Hanoi.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "Quick Sort"
+              "title": "Torres de Hanoi"
             }
           }
         ],
@@ -203,10 +203,12 @@
       "bases:Crear nueva base": false
     }
   },
-  "active": "20a21b3637da0f8e",
+  "active": "3a7755dc78f8ef52",
   "lastOpenFiles": [
-    "Actividad 10/Shell Sort.md",
+    "state/inuse.12300.lock",
     "Actividad 10/Quick Sort.md",
+    "Actividad 10/Torres de Hanoi.md",
+    "Actividad 10/Shell Sort.md",
     "Actividad 10/Actividad N° 10 Recursividad.pdf",
     "Actividad 10/img/ZoomIt 2026-10-23 212911.png",
     "Actividad 10/img/Pasted image 20261023181126.png",
