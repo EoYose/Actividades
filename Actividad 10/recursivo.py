@@ -352,7 +352,7 @@ def hanoi(n:int,o,d,a:list):
 def escaleras(n):
 	if n <= 0:
 		print("No hay peldaños por subir")
-		return lista
+		return []
 	if n == 1:
 		return [[1]]
 	if n == 2:
@@ -360,21 +360,21 @@ def escaleras(n):
 	else:
 		lista = [[1 for _ in range(n)]]
 		for j in escaleras(n-1):
-			if j != [1 for _ in range(n-1)]:
-				lista.append([1]+j)
-				lista.append(j+[1])
+			lista.append([1]+j)
+		for j in escaleras(n-2):
+			lista.append([2]+j)
 		if n%2 == 0:
 			lista.append([2 for _ in range(n//2)])
-	lista_limpia = []
-	for elemento in lista:
-		if elemento not in lista_limpia:
-			lista_limpia.append(elemento)
-	return lista_limpia
+	return lista
 
 print("Resultado")
-resultado = escaleras(6)
-print(resultado)
-print(len(resultado))
+resultado = escaleras(5)
+lista_limpia = []
+for elemento in resultado:
+	if elemento not in lista_limpia:
+		lista_limpia.append(elemento)
+print(lista_limpia)
+print(len(lista_limpia))
 exit()
 
 #################################
