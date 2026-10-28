@@ -317,8 +317,42 @@ def BBinario_recursiva(datos,inicio,final,valor):
 #################################
 # Torres de Hanoi
 #################################
-#!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-#Resultado correcto, funcionamiento erroneo
+def hanoi_iterativo(n):
+	src = 'A'
+	aux = 'C'
+	des = 'B'
+	
+	total_moves = 2 ** n - 1
+	if n % 2 == 0:
+	    des, aux = aux, des
+
+	# Índices: origen = 0, aux = 1, destino = 2
+	rods = [list(range(n, 0, -1)), [], []]
+	names = ['A', 'B', 'C']
+
+	for move in range(1, total_moves + 1):
+	    if move % 3 == 1:
+	        a, b = 0, 1
+	    elif move % 3 == 2:
+	        a, b = 0, 2
+	    else:
+	        a, b = 1, 2
+
+	    # Determinar el origen y el destino
+	    if rods[a] and (not rods[b] or rods[a][-1] < rods[b][-1]):
+	        from_rod, to_rod = a, b
+	    else:
+	        from_rod, to_rod = b, a
+
+	    disk = rods[from_rod].pop()
+	    rods[to_rod].append(disk)
+
+	    print(
+	        f"Move disk {disk} from "
+	        f"{names[from_rod]} to {names[to_rod]}"
+	    )
+	return rods
+print(hanoi_iterativo(4))
 #-------------Torres---------------
 #o: origen #d: destino #a: auxiliar
 #Representacion de las torres con arreglos:
@@ -349,7 +383,7 @@ def hanoi(n:int,o,d,a:list):
 #SUBIENDO ESCALERAS
 #################################
 
-def escaleras(n):
+def escaleras_recursivo(n):
 	if n <= 0:
 		print("No hay peldaños por subir")
 		return []
@@ -359,23 +393,24 @@ def escaleras(n):
 		return [[1,1],[2]]
 	else:
 		lista = [[1 for _ in range(n)]]
-		for j in escaleras(n-1):
+		for j in escaleras_recursivo(n-1):
 			lista.append([1]+j)
-		for j in escaleras(n-2):
+		for j in escaleras_recursivo(n-2):
 			lista.append([2]+j)
 		if n%2 == 0:
 			lista.append([2 for _ in range(n//2)])
 	return lista
 
-print("Resultado")
-resultado = escaleras(5)
-lista_limpia = []
-for elemento in resultado:
-	if elemento not in lista_limpia:
-		lista_limpia.append(elemento)
-print(lista_limpia)
-print(len(lista_limpia))
-exit()
+def limpiar_lista(lista, lista_limpia):
+	if 0 < len(lista):
+		elemento = lista.pop(0)
+		if elemento not in lista_limpia:
+			lista_limpia.append(elemento)
+		lista_limpia = limpiar_lista(lista,lista_limpia)
+	return lista_limpia
+
+def principal_escaleras(n):
+	return limpiar_lista(escaleras_recursivo(n),[])
 
 #################################
 #CONTROL DE ENTRADAS DEL USUARIO
