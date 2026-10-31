@@ -18,10 +18,7 @@ if True:
 			arreglo.append(dominio.pop(random.randint(1,len(dominio)-1)))
 
 	def crear_arreglo_aleatorio_recursivo(n,arreglo,dominio):
-		#dominio = [i for i in range(n+1)]
-		#arreglo = []
 		if len(arreglo) < n:
-		#for i in range(n):
 			arreglo.append(dominio.pop(random.randint(1,len(dominio)-1)))
 			arreglo = crear_arreglo_aleatorio_recursivo(n,arreglo, dominio)
 		return arreglo
@@ -266,7 +263,6 @@ if True:
 
 #-------------------------------------
 #QUICKSORT
-
 def quick_sort_recursivo(lista):
 	def aux(lista,i,j):
 		n = len(lista)
@@ -317,68 +313,78 @@ def BBinario_recursiva(datos,inicio,final,valor):
 #################################
 # Torres de Hanoi
 #################################
-def hanoi_iterativo(n):
-	src = 'A'
-	aux = 'C'
-	des = 'B'
-	
-	total_moves = 2 ** n - 1
-	if n % 2 == 0:
-	    des, aux = aux, des
-
-	# Índices: origen = 0, aux = 1, destino = 2
-	rods = [list(range(n, 0, -1)), [], []]
-	names = ['A', 'B', 'C']
-
-	for move in range(1, total_moves + 1):
-	    if move % 3 == 1:
-	        a, b = 0, 1
-	    elif move % 3 == 2:
-	        a, b = 0, 2
-	    else:
-	        a, b = 1, 2
-
-	    # Determinar el origen y el destino
-	    if rods[a] and (not rods[b] or rods[a][-1] < rods[b][-1]):
-	        from_rod, to_rod = a, b
-	    else:
-	        from_rod, to_rod = b, a
-
-	    disk = rods[from_rod].pop()
-	    rods[to_rod].append(disk)
-
-	    print(
-	        f"Move disk {disk} from "
-	        f"{names[from_rod]} to {names[to_rod]}"
-	    )
-	return rods
-print(hanoi_iterativo(4))
 #-------------Torres---------------
 #o: origen #d: destino #a: auxiliar
 #Representacion de las torres con arreglos:
 #[5,4,3,2,1]
 #suelo -> cima
-def hanoi(n:int,o,d,a:list):
-	if n == 1:
-		#sacar disco de O; poner en A
-		print("a",n,o,d,a)
-		a.append(o.pop(-1))
-		print("b",n,o,d,a)
-	else:
-		print("c",n,o,d,a)
-		o,d,a=hanoi(n - 1, o, a, d)
-		#sacar disco de O; poner en A
-		print("d",n,o,d,a)
-		#a.append(o.pop(-1))
-		print("e",n,o,d,a)
-		#if n == len(d):
-			#return o,d,a
-		o,d,a=hanoi(n - 1, a, d, o)
-	print("f",n,o,d,a)
-	return o,d,a
 
-#print(hanoi(4,[4,3,2,1],[],[]))
-#exit()
+if True:
+	def hanoi_iterativo(n):
+		total_moves = 2 ** n - 1
+		# Índices: origen = 0, aux = 1, destino = 2
+		rods = [list(range(n, 0, -1)), [], []]
+		names = ['A', 'B', 'C']
+
+		for move in range(1, total_moves + 1):
+		    if move % 3 == 1:
+		        a, b = 0, 1
+		    elif move % 3 == 2:
+		        a, b = 0, 2
+		    else:
+		        a, b = 1, 2
+
+		    # Determinar el origen y el destino
+		    if rods[a] and (not rods[b] or rods[a][-1] < rods[b][-1]):
+		        from_rod, to_rod = a, b
+		    else:
+		        from_rod, to_rod = b, a
+
+		    disk = rods[from_rod].pop()
+		    rods[to_rod].append(disk)
+
+		    print(
+		        f"mover disco {disk} desde "
+		        f"{names[from_rod]} hasta {names[to_rod]}"
+		    )
+		if len(rods[1]) > 0:
+			rods[2] = rods[1]
+			rods[1] = []
+		return rods
+
+	def principal_hanoi_recursivo(n):
+		# Índices: origen = 0, aux = 1, destino = 2
+		rods = [list(range(n, 0, -1)), [], []]
+		ordenado = hanoi_recursivo(rods=rods,move = 1,total_moves = 2 ** n - 1)
+		if len(ordenado[1]) > 0:
+			ordenado[2] = ordenado[1]
+			ordenado[1] = []
+		return ordenado
+	def hanoi_recursivo(rods,move,total_moves):
+		names = ['A', 'B', 'C']
+		if move < total_moves + 1:
+		    if move % 3 == 1:
+		        a, b = 0, 1
+		    elif move % 3 == 2:
+		        a, b = 0, 2
+		    else:
+		        a, b = 1, 2
+
+		    # Determinar el origen y el destino
+		    if rods[a] and (not rods[b] or rods[a][-1] < rods[b][-1]):
+		        from_rod, to_rod = a, b
+		    else:
+		        from_rod, to_rod = b, a
+
+		    disk = rods[from_rod].pop()
+		    rods[to_rod].append(disk)
+
+		    print(f"Mover disco {disk} desde ",f"{names[from_rod]} hasta {names[to_rod]}")
+
+		    move += 1
+		    rods = hanoi_recursivo(rods, move,total_moves)
+		return rods
+
 #################################
 #SUBIENDO ESCALERAS
 #################################
@@ -436,16 +442,11 @@ def preguntar_opciones(opciones:list):
 
 
 if __name__ == "__main__":
-	iterativo = [crear_arreglo_aleatorio_iterativo, imprimir_iterativo, sumar_iterativo, determinar_par_iterativo, contar_y_sumar_impares_iterativo,contar_y_sumar_impares_iterativo,ordenar_iterativo_seleccion,ordenar_iterativo_insercion,ordenar_iterativo_burbuja,shell_sort_iterativo]
-	recursivo = [principal_crear_arreglo_aleatorio_recursivo,principal_imprimir_recursivo,principal_sumar_recursivo,determinar_par_recursivo,principal_contar_y_sumar_pares_recursivo,principal_contar_y_sumar_impares_recursivo,principal_ordenar_recursivo_seleccion,principal_ordenar_recursivo_insercion,principal_ordenar_recursivo_burbuja,principal_shell_sort_recursivo,quick_sort_recursivo]
-	iterativo_ordenar = iterativo[6:9+1]
-	recursivo_ordenar = recursivo[6:10+1]
-
-	respuesta = preguntar_opciones(["Iterativo", "Recursivo"])
 	def corregir(text, eliminar):
 		for i in eliminar:
 			text = text.replace(i, "")
-		return text.replace("_"," ")	
+		return text.replace("_"," ")
+
 	def comparar_funciones(funciones, arreglo):
 		print(f"Arreglo original: {arreglo}")
 		arreglo.sort()
@@ -461,22 +462,89 @@ if __name__ == "__main__":
 		print(retorno)
 		print(f"La solucion es {["incorrecta","correcta"][int(arreglo==retorno)]}")
 
-	arreglo = principal_crear_arreglo_aleatorio_recursivo(preguntar_numero("Tamaño del arreglo: "))
-	print("Arreglo creado:", arreglo)
+	#iterativo = [crear_arreglo_aleatorio_iterativo, imprimir_iterativo, sumar_iterativo, determinar_par_iterativo, contar_y_sumar_impares_iterativo,contar_y_sumar_impares_iterativo,ordenar_iterativo_seleccion,ordenar_iterativo_insercion,ordenar_iterativo_burbuja,shell_sort_iterativo]
+	#recursivo = [principal_crear_arreglo_aleatorio_recursivo,principal_imprimir_recursivo,principal_sumar_recursivo,determinar_par_recursivo,principal_contar_y_sumar_pares_recursivo,principal_contar_y_sumar_impares_recursivo,principal_ordenar_recursivo_seleccion,principal_ordenar_recursivo_insercion,principal_ordenar_recursivo_burbuja,principal_shell_sort_recursivo,quick_sort_recursivo]
+	
+	iterativo_ordenar = [ordenar_iterativo_seleccion, ordenar_iterativo_insercion, ordenar_iterativo_burbuja, shell_sort_iterativo]
+	recursivo_ordenar = [principal_ordenar_recursivo_seleccion, principal_ordenar_recursivo_insercion, principal_ordenar_recursivo_burbuja, principal_shell_sort_recursivo, quick_sort_recursivo]
+	
+
+	respuesta = preguntar_opciones(["Ordenar",#1
+	"Crear arreglo aleatorio",#2
+	"Imprimir",#3
+	"sumar",#4
+	"determinar par",#5
+	"sumar y contar pares",#6
+	"sumar y contar impares",#7
+	"busqueda Binaria",#8
+	"Torres de hanoi",#9
+ 	"subir escaleras"#10
+ 	])
+	if respuesta in [1,2,4,6,7]:
+		arreglo = principal_crear_arreglo_aleatorio_recursivo(preguntar_numero("Tamaño del arreglo: "))
+		print("Arreglo creado:", arreglo)
+	
 	match respuesta:
-		case 1:
-			respuesta = preguntar_opciones([corregir(i.__name__,["iterativo"]) for i in iterativo_ordenar]+["todas"])
-			if respuesta > len(iterativo_ordenar):
-				comparar_funciones(iterativo_ordenar,arreglo)
-			else:
-				retorno = iterativo_ordenar[respuesta-1](arreglo)
-				verificar(arreglo,retorno)
+		case 1: #Ordenar Arreglo
+			respuesta = preguntar_opciones(["Iterativo", "Recursivo"])
+			match respuesta:
+				case 1:
+					respuesta = preguntar_opciones([corregir(i.__name__,["iterativo"]) for i in iterativo_ordenar]+["todas"])
+					if respuesta > len(iterativo_ordenar):
+						comparar_funciones(iterativo_ordenar,arreglo)
+					else:
+						retorno = iterativo_ordenar[respuesta-1](arreglo)
+						verificar(arreglo,retorno)
+				case 2:
+					respuesta = preguntar_opciones([corregir(i.__name__,["principal","recursivo"]) for i in recursivo_ordenar]+["todas"])
+					if respuesta > len(recursivo_ordenar):
+						comparar_funciones(recursivo_ordenar,arreglo)
+					else:
+						retorno = recursivo_ordenar[respuesta-1](arreglo)
+						verificar(arreglo,retorno)
 		case 2:
-			respuesta = preguntar_opciones([corregir(i.__name__,["principal","recursivo"]) for i in recursivo_ordenar]+["todas"])
-			if respuesta > len(recursivo_ordenar):
-				comparar_funciones(recursivo_ordenar,arreglo)
+			pass
+		case 3:
+			texto = input("Ingrese texto a imprimir: ")
+			print("-"*5)
+			principal_imprimir_recursivo(texto)
+		case 4:
+			print(f"suma: {principal_sumar_recursivo(arreglo)}")
+		case 5:
+			n = preguntar_numero("Numero: ")
+			print(f"El numero {n} {["no",""][int(determinar_par_recursivo(n))]} es par")
+		case 6:
+			conteo, suma = principal_contar_y_sumar_pares_recursivo(arreglo)
+			print(f"En el arreglo hay {conteo} numeros pares")
+			print(f"y suman {suma}")
+		case 7:
+			conteo, suma = principal_contar_y_sumar_impares_recursivo(arreglo)
+			print(f"En el arreglo hay {conteo} numeros impares")
+			print(f"y suman {suma}")
+		case 8:
+			tamaño = preguntar_numero("Tamaño del arreglo: ")
+			arreglo = crear_arreglo_aleatorio_recursivo(tamaño, [], [i//2 for i in range(1,tamaño+2)])
+			print("Arreglo creado:", arreglo)
+			arreglo_ordenado = quick_sort_recursivo(arreglo)
+			print("Arreglo ordenado:", arreglo_ordenado)
+			n = preguntar_numero("Buscar el numero")
+			indice = principal_BBinario_recursiva(arreglo_ordenado,n)
+			if indice == False:
+				print("El numero no ha sido encontrado")
 			else:
-				retorno = recursivo_ordenar[respuesta-1](arreglo)
-				verificar(arreglo,retorno)
+				print(f"El numero ha sido encontrado en el indice {indice}")
+		case 9:
+			resuelto = principal_hanoi_recursivo(preguntar_numero("Numero de aros de la torre de hanoi: "))
+			print("Torre ordenada")
+			print(resuelto)
+		case 10:
+			n = preguntar_numero("Cuantos peldaños tiene su escalera??? : ")
+			print("Se puede subir la escalera subiendo 1 o 2 peldaños a la vez.")
+			print("-"*20)
+			formas = principal_escaleras(n)
+			print(f"Se puede subir la escalera de {len(formas)} formas distintas")
+			print("Desea ver las formas de subir la escalera?")
+			if preguntar_opciones(["si","no"]) == 1:
+				print("Formas", formas)
 
 	input("Enter para salir..")
